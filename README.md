@@ -23,11 +23,23 @@ alias spinner="sh ~/dev/projects/spinner-tool/spinner-tool.sh"
 
 ### spinner-tool flags:
 
--e environment_name | default: e5a2prd
+The flags are used only with the **build** option.
 
--v release_version | default: next (latest release)
+`-e environment_name`
+default: e5a2prd
+Ex:
+`spinner -e e5a2prd build`
+`spinner -e e5a2prd stop`
 
--k dxp_activation_key | default: ~/dev/projects/dxp-activation-key/.
+`-v release_version`
+default: next (latest release)
+Ex:
+`spinner -v u64 build`
+
+`-k dxp_activation_key`
+default: ~/dev/projects/dxp-activation-key/.
+Ex:
+`spinner -k ~/Downloads/activation-key-7.4.xml build`
 
 ## exemple:
 
