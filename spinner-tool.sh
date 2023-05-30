@@ -29,6 +29,11 @@ elif [ $OPTION = "build" ]; then
 	LIFERAY_DOCKER_DIR=~/dev/projects/liferay-docker
 	LIFERAY_DOCKER_REMOTE=git@github.com:liferay/liferay-docker.git
 
+	if [ ! -d "~/dev" ] ; then
+		cd ~/
+		mkdir dev
+	fi
+
 	if [ ! -d "$LIFERAY_DOCKER_DIR" ] ; then
 		git clone $LIFERAY_DOCKER_REMOTE $LIFERAY_DOCKER_DIR
 		cd $LIFERAY_DOCKER_DIR
