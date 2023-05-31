@@ -53,7 +53,7 @@ Ex:
 
   copy this alias to your ~/.bashrc
 
-- `alias s="sh ~/dev/projects/spinner-tool/spinner-tool.sh`
+- `alias "s="sh ~/dev/projects/spinner-tool/spinner-tool.sh"`
 - `source ~/.bashrc`
 - `s -v u74 build`
 
