@@ -44,3 +44,18 @@ Ex:
 ## exemple:
 
 `spinner -e e5a2prd -v u74 build `
+
+## installation:
+
+- `cd ~/dev/projects/`
+- `git clone git@github.com:thaynam/spinner-tool.git`
+- `mkdir  ~/dev/projects/dxp-activation-key` and move the dxp-activation-key to this directory.
+
+  copy this alias to your ~/.bashrc
+
+- `alias s="sh ~/dev/projects/spinner-tool/spinner-tool.sh`
+- `source ~/.bashrc`
+- `s -v u74 build`
+
+spinner runs in
+http://localhost:18080/
