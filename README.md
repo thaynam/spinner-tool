@@ -2,15 +2,15 @@
 
 ### clone repo in
 
-~/dev/projects
+`~/dev/projects`
 
 ### copy alias in .bashrc
 
-alias spinner="sh ~/dev/projects/spinner-tool/spinner-tool.sh"
+alias spinner=`sh ~/dev/projects/spinner-tool/spinner-tool.sh`
 
 ### copy dxp activation key to
 
-~/dev/projects/dxp-activation-key
+`~/dev/projects/dxp-activation-key`
 
 ### spinner-tool options:
 
@@ -41,7 +41,7 @@ default: ~/dev/projects/dxp-activation-key/.
 Ex:
 `spinner -k ~/Downloads/activation-key-7.4.xml build`
 
-## exemple:
+## example:
 
 `spinner -e e5a2prd -v u74 build `
 
