@@ -117,7 +117,7 @@ elif [ $OPTION == "build" ]; then
 	./build.sh $ENV_NAME
 	cd ~/dev/projects/liferay-docker/spinner/env-$ENV_NAME*/
 	## create spinner dockers
-	docker-compose up -d antivirus database search && docker-compose up liferay-1	
+	docker compose up -d antivirus database search && docker compose up liferay-1	
 
 elif [ $OPTION == "start" ]; then
 	echo "spinner $OPTION"
