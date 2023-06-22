@@ -75,7 +75,7 @@ elif [ $OPTION == "build" ]; then
 	if [ ! -d "$LIFERAY_DOCKER_DIR" ] ; then
 		git clone $LIFERAY_DOCKER_REMOTE $LIFERAY_DOCKER_DIR
 		cd $LIFERAY_DOCKER_DIR
-		git checkout masterc
+		git checkout master
 		git pull 
 		git reset HEAD --hard
 
