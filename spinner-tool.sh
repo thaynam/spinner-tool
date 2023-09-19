@@ -142,6 +142,16 @@ elif [ $OPTION == "deploy"  ]; then
 	echo "spinner $OPTION"
 	LIFERAY_ID=$(docker ps -a -q --filter="publish=18080")
 	gw deploy -Ddeploy.docker.container.id=$LIFERAY_ID
+
+elif [ $OPTION == "deployDev"  ]; then
+	echo "spinner $OPTION"
+	LIFERAY_ID=$(docker ps -a -q --filter="publish=18080")
+	gw deployDev -Ddeploy.docker.container.id=$LIFERAY_ID
+
+elif [ $OPTION == "deployStaging"  ]; then
+	echo "spinner $OPTION"
+	LIFERAY_ID=$(docker ps -a -q --filter="publish=18080")
+	gw deployStaging -Ddeploy.docker.container.id=$LIFERAY_ID
 else
 	echo -e "Choose an option:  \n- spinner build \n- spinner start \n- spinner stop \n- spinner rm \n- spinner forceDeploy \n- spinner deploy "
 fi
