@@ -52,8 +52,8 @@ then
 	echo "No arguments supplied"
 elif [ $OPTION == "build" ]; then
 	echo "spinner $OPTION"
-	ENV_NAME=${ENV_NAME:-e5a2prd}
-	RELEASE_VERSION=${RELEASE_VERSION:-next}
+	ENV_NAME=${ENV_NAME:-e5a2preprod}
+	RELEASE_VERSION=${RELEASE_VERSION:-u92}
 	DXP_ACTIVATION_KEY_DIR=${DXP_ACTIVATION_KEY_DIR:-~/dev/projects/dxp-activation-key/.}
 	
 	echo "";
