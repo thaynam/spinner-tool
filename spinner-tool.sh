@@ -53,7 +53,7 @@ then
 elif [ $OPTION == "build" ]; then
 	echo "spinner $OPTION"
 	ENV_NAME=${ENV_NAME:-e5a2preprod}
-	RELEASE_VERSION=${RELEASE_VERSION:-u92}
+	RELEASE_VERSION=${RELEASE_VERSION:-u98}
 	DXP_ACTIVATION_KEY_DIR=${DXP_ACTIVATION_KEY_DIR:-~/dev/projects/dxp-activation-key/.}
 	
 	echo "";
@@ -82,8 +82,8 @@ elif [ $OPTION == "build" ]; then
 	else
 		cd $LIFERAY_DOCKER_DIR
 		git checkout master
-		git pull 
-		git reset HEAD --hard
+		# git pull 
+		# git reset HEAD --hard
 	fi
 
 	## create or  update liferay-lxc
