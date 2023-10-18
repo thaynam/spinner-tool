@@ -75,15 +75,15 @@ elif [ $OPTION == "build" ]; then
 	if [ ! -d "$LIFERAY_DOCKER_DIR" ] ; then
 		git clone $LIFERAY_DOCKER_REMOTE $LIFERAY_DOCKER_DIR
 		cd $LIFERAY_DOCKER_DIR
-		git checkout master
 		git pull 
 		git reset HEAD --hard
+		git checkout master
 
 	else
 		cd $LIFERAY_DOCKER_DIR
+		git pull 
+		git reset HEAD --hard
 		git checkout master
-		# git pull 
-		# git reset HEAD --hard
 	fi
 
 	## create or  update liferay-lxc
@@ -93,15 +93,15 @@ elif [ $OPTION == "build" ]; then
 	if [ ! -d "$LIFERAY_LXC_DIR" ] ; then
 		git clone $LIFERAY_LXC_REMOTE $LIFERAY_LXC_DIR
 		cd $LIFERAY_LXC_DIR
-		git checkout 7.4-$RELEASE_VERSION
 		git pull 
 		git reset HEAD --hard
+		git checkout 7.4-$RELEASE_VERSION
 
 	else
 		cd $LIFERAY_LXC_DIR
-		git checkout 7.4-$RELEASE_VERSION
 		git pull 
 		git reset HEAD --hard
+		git checkout 7.4-$RELEASE_VERSION
 	fi
 	
 	## stop and remove all mysql dockers
