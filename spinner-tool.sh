@@ -212,6 +212,19 @@ elif [ $OPTION == "reset"  ]; then
 	rm -rf ~/dev/projects/liferay-docker
 	rm -rf ~/dev/projects/liferay-lxc
 	printf 'liferay-docker and liferay-lxc repositories were deleted.'
+
+elif [ $OPTION == "prune"  ]; then
+	echo "spinner $OPTION"
+	printf '\n'
+	read -r -p "WARNING! This will stop and remove all dockers from system. Are you sure? [y/N] "
+ 	response=${response,,} 
+	printf '\n'
+ 	if [[ $response =~ ^(y| ) ]] || [[ -z $response ]]; then
+    	docker stop $(docker ps -a -q) 
+		docker rm $(docker ps -a -q)
+		printf '\n'
+		docker system prune --all --volumes
+ 	fi
 else
-	echo -e "Choose an option:  \n- spinner build \n- spinner start \n- spinner stop  \n- spinner restart \n- spinner rm \n- spinner deploy \n- spinner deployDev \n- spinner database \n- spinner reset"
+	echo -e "Choose an option:  \n- spinner build \n- spinner start \n- spinner stop  \n- spinner restart \n- spinner rm \n- spinner deploy \n- spinner deployDev \n- spinner database \n- spinner reset \n- spinner prune"
 fi
