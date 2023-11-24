@@ -69,15 +69,15 @@ elif [ $OPTION == "build" ]; then
 
 	if [ ! -d "~/dev/projects" ] ; then
 		cd ~/
-		mkdir dev/projects >/dev/null
+		mkdir dev/projects
 	fi
 
 	if [ ! -d "$LIFERAY_DOCKER_DIR" ] ; then
-		git clone $LIFERAY_DOCKER_REMOTE $LIFERAY_DOCKER_DIR >/dev/null
+		git clone $LIFERAY_DOCKER_REMOTE $LIFERAY_DOCKER_DIR 
 		cd $LIFERAY_DOCKER_DIR
 		git pull 
 		git checkout master
-		git rm .gitattributes >/dev/null
+		git rm .gitattributes
 		git add -A
 		git reset --hard
 
@@ -85,7 +85,7 @@ elif [ $OPTION == "build" ]; then
 		cd $LIFERAY_DOCKER_DIR
 		git pull 
 		git checkout master
-		git rm .gitattributes >/dev/null
+		git rm .gitattributes
 		git add -A
 		git reset --hard
 	fi
@@ -95,21 +95,21 @@ elif [ $OPTION == "build" ]; then
 	LIFERAY_LXC_REMOTE=git@github.com:liferay/liferay-lxc.git
 
 	if [ ! -d "$LIFERAY_LXC_DIR" ] ; then
-		git clone $LIFERAY_LXC_REMOTE $LIFERAY_LXC_DIR >/dev/null
+		git clone $LIFERAY_LXC_REMOTE $LIFERAY_LXC_DIR 
 		cd $LIFERAY_LXC_DIR 
 		git pull 
 		git checkout 7.4-$RELEASE_VERSION
-		git rm .gitattributes >/dev/null
+		git rm .gitattributes 
 		git add -A
-		git reset --hard >/dev/null
+		git reset --hard 
 
 	else
 		cd $LIFERAY_LXC_DIR
 		git pull 
 		git checkout 7.4-$RELEASE_VERSION
-		git rm .gitattributes >/dev/null
+		git rm .gitattributes 
 		git add -A
-		git reset --hard >/dev/null
+		git reset --hard
 	fi
 	
 	## stop and remov	e all dockers with env name
