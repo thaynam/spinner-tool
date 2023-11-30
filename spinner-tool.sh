@@ -182,6 +182,14 @@ elif [ $OPTION == "deployMP"	]; then
 	cd ~/dev/projects/liferay-portal/modules/apps/site-initializer/site-initializer-liferay-marketplace
 	gw clean deploy
 
+	sleep .5
+    printf 'Deploying spinner extension'
+	printf '\n'	
+	containerId=$(docker ps -a --format '{{.ID}} {{.Image}}' | awk '/liferay-1/ {print $1; exit}')
+	echo 'Found a container with liferay-1 in the image. Container ID: '$containerId''
+	printf '\n'
+	sleep .5
+
     # Check if containerId is not empty
     if [ -n "$containerId" ]; then
         # Change to the specified directory
