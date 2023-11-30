@@ -148,6 +148,30 @@ elif [ $OPTION == "stop"  ]; then
 	cd ~/dev/projects/liferay-docker/spinner/env-$ENV_NAME*/
 	docker compose stop
 
+elif [ $OPTION == "deployMP"	]; then
+	sleep .5
+    echo 'deploying workspace directorie to gradle.proprieties.'
+	echo '.'
+	workspace_path=~/dev/projects/liferay-portal/workspaces/liferay-marketplace-workspace
+
+	gradle_properties_file=$workspace_path/gradle.properties
+	line_to_add="liferay.workspace.home.dir=/home/me/dev/bundles/master"
+
+	if [ -e $gradle_properties_file ]; then
+		if grep -qF "$line_to_add" $gradle_properties_file; then
+			echo "Line already exists in gradle.properties. No action needed."
+		else
+			echo "" >> $gradle_properties_file
+			echo "$line_to_add" >> $gradle_properties_file
+			echo "Line added to gradle.properties."
+		fi
+	else
+		echo "gradle.properties file not found in the specified directory."
+	fi
+
+	gw deploy
+
+
 elif [ $OPTION == "restart"  ]; then
 	echo "spinner $OPTION"
 	cd ~/dev/projects/liferay-docker/spinner/env-$ENV_NAME*/
@@ -193,7 +217,7 @@ elif [ $OPTION == "database"  ]; then
 	docker compose start database
 
 	DATABASE_ID=$(docker ps -a -q --filter="name=database_")
-   printf '\n'
+    printf '\n'
 
 	printf 'Starting database clean up'
     sleep .5
@@ -226,5 +250,5 @@ elif [ $OPTION == "prune"  ]; then
 		docker system prune --all --volumes
  	fi
 else
-	echo -e "Choose an option:  \n- spinner build \n- spinner start \n- spinner stop  \n- spinner restart \n- spinner rm \n- spinner deploy \n- spinner deployDev \n- spinner database \n- spinner reset \n- spinner prune"
+	echo -e "Choose an option:  \n- spinner build \n- spinner start \n- spinner stop  \n- spinner restart \n- spinner rm \n- spinner deploy \n- spinner deployDev \n- spinner database \n- spinner reset \n- spinner prune \n- spinner deployMP"
 fi
