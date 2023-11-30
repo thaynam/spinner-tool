@@ -176,6 +176,26 @@ elif [ $OPTION == "deployMP"	]; then
 	cd ~/dev/projects/liferay-portal/workspaces/liferay-marketplace-workspace/client-extensions
 	gw deploy
 
+	sleep .5
+	printf 'deploying MP initializer'
+	printf '\n'
+	cd ~/dev/projects/liferay-portal/modules/apps/site-initializer/site-initializer-liferay-marketplace
+	gw clean deploy
+
+    # Check if containerId is not empty
+    if [ -n "$containerId" ]; then
+        # Change to the specified directory
+        projectDirectory=~/dev/projects/liferay-portal/workspaces/liferay-marketplace-workspace/client-extensions
+        cd "$projectDirectory"
+		echo 'Starting the deploying of the Container ID: '$containerId''
+		echo '.'
+		sleep .5
+        # Run the specified command with the found container ID
+        gw :client-extensions:liferay-marketplace-custom-element:deploy -Ddeploy.docker.container.id="$containerId"
+    else
+        printf "No container found with liferay-1 in the image."
+    fi
+
 
 elif [ $OPTION == "restart"  ]; then
 	echo "spinner $OPTION"
