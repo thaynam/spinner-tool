@@ -148,6 +148,63 @@ elif [ $OPTION == "stop"  ]; then
 	cd ~/dev/projects/liferay-docker/spinner/env-$ENV_NAME*/
 	docker compose stop
 
+elif [ $OPTION == "deployMP"	]; then
+	sleep .5
+    echo 'deploying workspace directorie to gradle.proprieties.'
+	echo '.'
+	workspace_path=~/dev/projects/liferay-portal/workspaces/liferay-marketplace-workspace
+
+	gradle_properties_file=$workspace_path/gradle.properties
+	line_to_add="liferay.workspace.home.dir=/home/me/dev/bundles/master"
+
+	if [ -e $gradle_properties_file ]; then
+		if grep -qF "$line_to_add" $gradle_properties_file; then
+			echo "Line already exists in gradle.properties. No action needed."
+		else
+			echo "" >> $gradle_properties_file
+			echo "$line_to_add" >> $gradle_properties_file
+			echo "Line added to gradle.properties."
+		fi
+	else
+		echo "gradle.properties file not found in the specified directory."
+	fi
+	gw deploy
+
+	sleep .5
+    printf 'deploying Liferay Portal Client Extensions.'
+	printf '\n'
+	cd ~/dev/projects/liferay-portal/workspaces/liferay-marketplace-workspace/client-extensions
+	gw deploy
+
+	sleep .5
+	printf 'deploying MP initializer'
+	printf '\n'
+	cd ~/dev/projects/liferay-portal/modules/apps/site-initializer/site-initializer-liferay-marketplace
+	gw clean deploy
+
+	sleep .5
+    printf 'Deploying spinner extension'
+	printf '\n'	
+	containerId=$(docker ps -a --format '{{.ID}} {{.Image}}' | awk '/liferay-1/ {print $1; exit}')
+	echo 'Found a container with liferay-1 in the image. Container ID: '$containerId''
+	printf '\n'
+	sleep .5
+
+    # Check if containerId is not empty
+    if [ -n "$containerId" ]; then
+        # Change to the specified directory
+        projectDirectory=~/dev/projects/liferay-portal/workspaces/liferay-marketplace-workspace/client-extensions
+        cd "$projectDirectory"
+		echo 'Starting the deploying of the Container ID: '$containerId''
+		echo '.'
+		sleep .5
+        # Run the specified command with the found container ID
+        gw :client-extensions:liferay-marketplace-custom-element:deploy -Ddeploy.docker.container.id="$containerId"
+    else
+        printf "No container found with liferay-1 in the image."
+    fi
+
+
 elif [ $OPTION == "restart"  ]; then
 	echo "spinner $OPTION"
 	cd ~/dev/projects/liferay-docker/spinner/env-$ENV_NAME*/
@@ -193,7 +250,7 @@ elif [ $OPTION == "database"  ]; then
 	docker compose start database
 
 	DATABASE_ID=$(docker ps -a -q --filter="name=database_")
-   printf '\n'
+    printf '\n'
 
 	printf 'Starting database clean up'
     sleep .5
@@ -226,5 +283,5 @@ elif [ $OPTION == "prune"  ]; then
 		docker system prune --all --volumes
  	fi
 else
-	echo -e "Choose an option:  \n- spinner build \n- spinner start \n- spinner stop  \n- spinner restart \n- spinner rm \n- spinner deploy \n- spinner deployDev \n- spinner database \n- spinner reset \n- spinner prune"
+	echo -e "Choose an option:  \n- spinner build \n- spinner start \n- spinner stop  \n- spinner restart \n- spinner rm \n- spinner deploy \n- spinner deployDev \n- spinner database \n- spinner reset \n- spinner prune \n- spinner deployMP"
 fi
