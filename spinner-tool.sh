@@ -168,7 +168,12 @@ elif [ $OPTION == "deployMP"	]; then
 	else
 		echo "gradle.properties file not found in the specified directory."
 	fi
+	gw deploy
 
+	sleep .5
+    printf 'deploying Liferay Portal Client Extensions.'
+	printf '\n'
+	cd ~/dev/projects/liferay-portal/workspaces/liferay-marketplace-workspace/client-extensions
 	gw deploy
 
 
