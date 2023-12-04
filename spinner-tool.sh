@@ -175,6 +175,7 @@ elif [ $OPTION == "deployMP"	]; then
 			fi
 			gw deploy
  	fi
+fi
 
 	printf '\n'
 	read -r -p "Action is required! This action will locally deploy Liferay Portal Client Extensions.[y/N] "
@@ -245,9 +246,8 @@ elif [ $OPTION == "MPupdateMaster" ]; then
 			echo 'Found a container with liferay-1 in the image. Container ID: '$containerId''
 			printf '\n'
 			echo 'Stoping docker running of the Container ID: '$containerId''
-			d stop "$containerId"
-			d start "$containerId"
-			
+			d stop '$containerId' 
+			d start '$containerId'
 		else
 			printf "No container found with liferay-1 in the image."
 	fi	
