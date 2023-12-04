@@ -20,6 +20,8 @@ alias spinner="sh ~/dev/projects/spinner-tool/spinner-tool.sh"
 - `spinner rm`
 - `spinner forceDeploy`
 - `spinner deploy`
+- `spinner deployMP`
+- `spinner MPupdateMaster`
 
 ### spinner-tool flags:
 
