@@ -185,6 +185,15 @@ elif [ $OPTION == "deployDev"  ]; then
 	LIFERAY_ID=$(docker ps -a -q --filter="publish=18080")
 	gw deployDev -Ddeploy.docker.container.id=$LIFERAY_ID
 
+elif [ $OPTION == "deployPrm"  ]; then
+	echo "spinner $OPTION"
+	LIFERAY_ID=$(docker ps -a -q --filter="publish=18080")
+	cd ~/dev/projects/liferay-portal/modules/dxp/apps/osb/osb-site-initializer/osb-site-initializer-partner-portal
+	gw deploy -Ddeploy.docker.container.id=$LIFERAY_ID
+	cd ~/dev/projects/liferay-portal/workspaces/liferay-partner-workspace/client-extensions/liferay-partner-custom-element
+	gw deployDev -Ddeploy.docker.container.id=$LIFERAY_ID
+	yarn dev
+
 elif [ $OPTION == "database"  ]; then
 	echo "spinner $OPTION"
 	DATABASE_PASSWORD="password"
