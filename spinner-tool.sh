@@ -1,4 +1,4 @@
-function execute_gradlew {
+ function execute_gradlew {
 	if [ -e ../gradlew ]
 	then
 		../gradlew ${@}
@@ -147,6 +147,112 @@ elif [ $OPTION == "stop"  ]; then
 	echo "spinner $OPTION"
 	cd ~/dev/projects/liferay-docker/spinner/env-$ENV_NAME*/
 	docker compose stop
+	
+	#
+	# MP Aditional Deploys
+	#
+elif [ $OPTION == "deployMP"	]; then
+	printf '\n'
+	read -r -p "Action is required! Do you wnat to deploy workspace directorie to gradle.proprieties? [y/N]"
+ 	response=${response,,} 
+	printf '\n'
+ 	if [[ $response =~ ^(y| ) ]] || [[ -z $response ]]; then
+		workspace_path=~/dev/projects/liferay-portal/workspaces/liferay-marketplace-workspace
+
+			gradle_properties_file=$workspace_path/gradle.properties
+			line_to_add="liferay.workspace.home.dir=/home/me/dev/bundles/master"
+
+			if [ -e $gradle_properties_file ]; then
+				if grep -qF "$line_to_add" $gradle_properties_file; then
+					echo "Line already exists in gradle.properties. No action needed."
+				else
+					echo "" >> $gradle_properties_file
+					echo "$line_to_add" >> $gradle_properties_file
+					echo "Line added to gradle.properties."
+				fi
+			else
+				echo "gradle.properties file not found in the specified directory."
+			fi
+			gw deploy
+ 	fi
+fi
+
+	printf '\n'
+	read -r -p "Action is required! This action will locally deploy Liferay Portal Client Extensions.[y/N] "
+ 	response=${response,,} 
+	printf '\n'
+ 	if [[ $response =~ ^(y| ) ]] || [[ -z $response ]]; then
+		sleep .5
+		printf 'deploying Liferay Portal Client Extensions.'
+		printf '\n'
+		cd ~/dev/projects/liferay-portal/workspaces/liferay-marketplace-workspace/client-extensions
+		gw deploy
+ 	fi
+
+	printf '\n'
+	read -r -p "Action is required! Thi action will deploy MP initializer.[y/N] "
+ 	response=${response,,} 
+	printf '\n'
+ 	if [[ $response =~ ^(y| ) ]] || [[ -z $response ]]; then
+		cd ~/dev/projects/liferay-portal/modules/apps/site-initializer/site-initializer-liferay-marketplace
+		gw clean deploy
+ 	fi	
+
+	printf '\n'
+	read -r -p "Action is required! This action will Deploy Spinner extension and springboot.[y/N] "
+ 	response=${response,,} 
+	printf '\n'
+ 	if [[ $response =~ ^(y| ) ]] || [[ -z $response ]]; then
+		containerId=$(docker ps -a --format '{{.ID}} {{.Image}}' | awk '/liferay-1/ {print $1; exit}')
+		# Check if containerId is not empty
+		if [ -n "$containerId" ]; then
+			echo 'Found a container with liferay-1 in the image. Container ID: '$containerId''
+			printf '\n'
+			projectDirectory=~/dev/projects/liferay-portal/workspaces/liferay-marketplace-workspace/client-extensions
+			cd "$projectDirectory"
+			echo 'Starting the deploying of the Container ID: '$containerId''
+			echo '.'
+			sleep .5
+			# Run the specified command with the found container ID
+			gw :client-extensions:liferay-marketplace-custom-element:deploy -Ddeploy.docker.container.id="$containerId"
+			cd ~/dev/projects/liferay-portal/workspaces/liferay-marketplace-workspace/client-extensions/liferay-marketplace-etc-spring-boot
+			gw :client-extensions:liferay-marketplace-etc-spring-boot:deploy -Ddeploy.docker.container.id="$containerId"
+		else
+			printf "No container found with liferay-1 in the image."
+		fi
+ 	fi	
+
+elif [ $OPTION == "MPupdateMaster" ]; then
+	echo "spinner $OPTION"
+	cd cdt
+	git pull
+	printf '\n'
+	printf "Genarating jar file ..."
+    sleep .5
+	cd ~/dev/projects/liferay-portal/modules/apps/site-initializer/site-initializer-liferay-marketplace
+	gw clean deploy
+	cp -v /home/me/dev/bundles/master/osgi/portal/com.liferay.site.initializer.liferay.marketplace.jar /home/me/dev/projects/liferay-docker/spinner/env-e5a2preprod-17*/liferay_mount/patching
+	echo 'Process completed. for changes '
+    printf '.'
+	
+	printf '\n'
+	read -r -p "Action is required! Do you wish restart spinner container [y/N] "
+ 	response=${response,,} 
+	printf '\n'
+ 	if [[ $response =~ ^(y| ) ]] || [[ -z $response ]]; then
+		containerId=$(docker ps -a --format '{{.ID}} {{.Image}}' | awk '/liferay-1/ {print $1; exit}')
+		# Check if containerId is not empty
+		if [ -n "$containerId" ]; then
+			echo 'Found a container with liferay-1 in the image. Container ID: '$containerId''
+			printf '\n'
+			echo 'Stoping docker running of the Container ID: '$containerId''
+			d stop '$containerId' 
+			d start '$containerId'
+		else
+			printf "No container found with liferay-1 in the image."
+	fi	
+
+
 
 elif [ $OPTION == "restart"  ]; then
 	echo "spinner $OPTION"
@@ -202,7 +308,7 @@ elif [ $OPTION == "database"  ]; then
 	docker compose start database
 
 	DATABASE_ID=$(docker ps -a -q --filter="name=database_")
-   printf '\n'
+    printf '\n'
 
 	printf 'Starting database clean up'
     sleep .5
@@ -235,5 +341,5 @@ elif [ $OPTION == "prune"  ]; then
 		docker system prune --all --volumes
  	fi
 else
-	echo -e "Choose an option:  \n- spinner build \n- spinner start \n- spinner stop  \n- spinner restart \n- spinner rm \n- spinner deploy \n- spinner deployDev \n- spinner database \n- spinner reset \n- spinner prune"
+	echo -e "Choose an option:  \n- spinner build \n- spinner start \n- spinner stop  \n- spinner restart \n- spinner rm \n- spinner deploy \n- spinner deployDev \n- spinner database \n- spinner reset \n- spinner prune \n- spinner deployMP"
 fi
