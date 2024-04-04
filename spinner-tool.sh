@@ -52,8 +52,8 @@ then
 	echo "No arguments supplied"
 elif [ $OPTION == "build" ]; then
 	echo "spinner $OPTION"
-	ENV_NAME=${ENV_NAME:-e5a2preprod}
-	RELEASE_VERSION=${RELEASE_VERSION:-u102}
+	ENV_NAME=${ENV_NAME:-e5a2prd}
+	RELEASE_VERSION=${RELEASE_VERSION:-u108}
 	DXP_ACTIVATION_KEY_DIR=${DXP_ACTIVATION_KEY_DIR:-~/dev/projects/dxp-activation-key/.}
 	
 	echo "";
@@ -189,6 +189,10 @@ elif [ $OPTION == "deployPrm"  ]; then
 	echo "spinner $OPTION"
 	LIFERAY_ID=$(docker ps -a -q --filter="publish=18080")
 	cd ~/dev/projects/liferay-portal/modules/dxp/apps/osb/osb-site-initializer/osb-site-initializer-partner-portal
+	gw deploy -Ddeploy.docker.container.id=$LIFERAY_ID
+	cd ~/dev/projects/liferay-portal/workspaces/liferay-partner-workspace/client-extensions/liferay-partner-etc-spring-boot
+	gw deploy -Ddeploy.docker.container.id=$LIFERAY_ID
+	cd ~/dev/projects/liferay-portal/workspaces/liferay-partner-workspace/client-extensions/liferay-partner-etc-cron
 	gw deploy -Ddeploy.docker.container.id=$LIFERAY_ID
 	cd ~/dev/projects/liferay-portal/workspaces/liferay-partner-workspace/client-extensions/liferay-partner-custom-element
 	gw deployDev -Ddeploy.docker.container.id=$LIFERAY_ID
